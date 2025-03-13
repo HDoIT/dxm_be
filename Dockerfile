@@ -17,4 +17,4 @@ LABEL authors="HP"
 WORKDIR /app
 COPY --from=build /app/target/dxmbe-0.0.1-SNAPSHOT.jar app.jar
 EXPOSE 9123
-ENTRYPOINT ["java", "-jar", "app.jar"]
+ENTRYPOINT ["java", "-Xmx256m", "-Xms128m", "-jar", "app.jar"]
