@@ -1,0 +1,35 @@
+package com.dxm.dxmbe.service;
+
+import com.dxm.dxmbe.model.Bill;
+import com.dxm.dxmbe.repository.BillRepository;
+import com.dxm.dxmbe.request.BillRequest;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
+
+import java.time.Instant;
+
+@Service
+public class BillServiceImpl implements BillService {
+
+    @Autowired
+    private BillRepository billRepository;
+
+    @Override
+    public int addBill(BillRequest.createBill billSpending) {
+        try {
+            Bill bill = Bill.builder()
+                    .name(billSpending.getName())
+                    .description(billSpending.getDescription())
+                    .amount(billSpending.getAmount())
+                    .categoryId(billSpending.getCategoryId())
+                    .date(Instant.ofEpochMilli(billSpending.getDate()))
+                    .createAt(Instant.now())
+                    .build();
+            billRepository.save(bill);
+            return 1;
+        } catch (Exception e) {
+            System.out.println("Error" + e);
+        }
+        return -1;
+    }
+}

@@ -1,0 +1,9 @@
+spring.application.name=dxmbe
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/dxm_db
+spring.datasource.username=postgres
+spring.datasource.password=Ab12345678
+
+spring.jpa.properties.hibernate.format_sql=true
+spring.jpa.properties.hibernate.dialect=org.hibernate.dialect.PostgreSQLDialect
+spring.jpa.hibernate.ddl-auto = update

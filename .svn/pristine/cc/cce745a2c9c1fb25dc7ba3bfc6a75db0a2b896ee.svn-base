@@ -1,0 +1,5 @@
+spring.application.name=dxmbe
+
+spring.datasource.url=jdbc:postgresql://localhost:5432/dxm_db
+spring.datasource.username=postgres
+spring.datasource.password=Ab12345678

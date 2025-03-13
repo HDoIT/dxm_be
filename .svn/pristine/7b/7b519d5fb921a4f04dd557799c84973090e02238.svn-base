@@ -1,0 +1,29 @@
+package com.dxm.dxmbe.model;
+
+import javax.persistence.*;
+
+@Entity
+@Table(name = "bills")
+public class BillSpending {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private long id;
+
+    @Column(nullable = true ,length = 255)
+    private String name;
+
+    @Column(nullable = true ,length = 255)
+    private String description;
+
+    @Column(nullable = true ,length = 255)
+    private Double morningMoney;
+    @Column(nullable = true ,length = 255)
+    private Double afternoonMoney;
+    @Column(nullable = true ,length = 255)
+    private Double eveningMoney;
+    @Column(nullable = true ,length = 255)
+    private Double otherMoney;
+
+    private Double totalAmount;
+
+}
