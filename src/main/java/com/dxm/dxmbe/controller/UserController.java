@@ -1,6 +1,7 @@
 package com.dxm.dxmbe.controller;
 
 import com.dxm.dxmbe.enums.ErrorCode;
+import com.dxm.dxmbe.exceptions.DxmException;
 import com.dxm.dxmbe.model.User;
 import com.dxm.dxmbe.request.UserRequest;
 import com.dxm.dxmbe.response.ResqBean;
@@ -24,15 +25,23 @@ public class UserController {
 
     @PostMapping("/login")
     public ResqBean<String> login(@RequestBody UserRequest.loginRequest loginRequest) {
-        return ResqBean.ok("success", userService.login(loginRequest));
+        try{
+            return ResqBean.ok("success", userService.login(loginRequest));
+        }catch (DxmException e){
+            return ResqBean.error(e.getMessage(), null, 400);
+        }catch (Exception e){
+            return ResqBean.error(e.getMessage(), null, 500);
+        }
     }
 
     @PostMapping("/register")
     public ResqBean<Integer> register(@RequestBody UserRequest.registerUser registerUser) {
         try {
             return ResqBean.ok("success", userService.register(registerUser));
-        }catch (Exception e) {
-            return ResqBean.error(e.getMessage(), null, 400);
+        }catch (DxmException e){
+            return ResqBean.error(e.getMessage(), -1, 400);
+        }catch (Exception e){
+            return ResqBean.error(e.getMessage(), -1, 500);
         }
     }
 

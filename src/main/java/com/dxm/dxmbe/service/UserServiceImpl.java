@@ -1,13 +1,18 @@
 package com.dxm.dxmbe.service;
 
+import com.dxm.dxmbe.enums.ErrorException;
+import com.dxm.dxmbe.exceptions.DxmException;
 import com.dxm.dxmbe.model.User;
 import com.dxm.dxmbe.repository.UserRepository;
 import com.dxm.dxmbe.request.UserRequest;
 import com.dxm.dxmbe.utils.Auth;
+import org.hibernate.engine.jdbc.spi.SqlExceptionHelper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
+import java.sql.SQLException;
 import java.time.Instant;
 import java.util.Optional;
 
@@ -26,6 +31,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public int register(UserRequest.registerUser registerUser) {
         try {
+            if(userRepository.existsByEmail(registerUser.getEmail())) {
+                throw new DxmException(ErrorException.EMAIL_EXIST);
+            }
+            if(userRepository.existsByUserName(registerUser.getUserName())) {
+                throw new DxmException(ErrorException.USERNAME_EXIST);
+            }
+            if(userRepository.existsByPhone(registerUser.getPhone())) {
+                throw new DxmException(ErrorException.PHONE_EXIST);
+            }
             User user = User.builder()
                     .userName(registerUser.getUserName())
                     .fullName(registerUser.getFullName())
@@ -41,9 +55,10 @@ public class UserServiceImpl implements UserService {
                     .build();
             userRepository.save(user);
             return 1;
+        }catch (DxmException e){
+            throw e;
         } catch (Exception e) {
-            System.out.println(e.getMessage());
-            return -1;
+            throw new DxmException(ErrorException.ERROR_SERVER);
         }
 
     }
@@ -55,18 +70,21 @@ public class UserServiceImpl implements UserService {
             Optional<User> user = userRepository.findByUserName(loginRequest.getUserName());
 
             if(user.isPresent()){
-                User userGenarate = User.builder().id(user.get().getId())
+                User userGenerate = User.builder().id(user.get().getId())
                         .userName(user.get().getUserName())
                         .build();
                 if (auth.matchPassword(loginRequest.getPassWord(), user.get().getPassword())) {
-                    return auth.generateToken(userGenarate);
+                    return auth.generateToken(userGenerate);
                 }
+                throw new DxmException(ErrorException.USERNAME_PASSWORD_WRONG);
             }
+            throw new DxmException(ErrorException.USER_NOT_EXIST);
 
+        }catch (DxmException e){
+            throw e;
         }catch (Exception ex){
-            System.out.println(ex);
+            throw new DxmException(ErrorException.ERROR_SERVER);
         }
-        return null;
     }
 
     @Override

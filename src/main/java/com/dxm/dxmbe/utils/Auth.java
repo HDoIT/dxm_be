@@ -1,4 +1,6 @@
 package com.dxm.dxmbe.utils;
+import com.dxm.dxmbe.enums.ErrorException;
+import com.dxm.dxmbe.exceptions.DxmException;
 import com.dxm.dxmbe.model.User;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
@@ -54,11 +56,13 @@ public class Auth {
             Jwts.parser().setSigningKey(getSigningKey()).parseClaimsJws(token);
             return true;
         }catch (ExpiredJwtException e){
-            System.out.println("xxx "+e);
-            throw new JwtException("Expired or invalid JWT token");
+            System.out.println("ExpiredJwtException "+e);
+            throw new DxmException(ErrorException.EXPIRED_JWT_TOKEN);
         }catch (JwtException e){
-            System.out.println("yyy "+e);
-            throw new JwtException("Invalid JWT token");
+            System.out.println("Invalid JWT token "+e);
+            throw new DxmException(ErrorException.INVALID_JWT_TOKEN);
+        }catch (Exception e){
+            throw new DxmException(ErrorException.ERROR_SERVER);
         }
 //        return false;
     }

@@ -26,13 +26,13 @@ public class User {
     @Column(nullable = true,name = "url_avatar")
     private String urlAvatar;
 
-    @Column(nullable = true,name = "email",unique = true)
+    @Column(nullable = false,name = "email",unique = true)
     private String email;
 
     @Column(nullable = false, name = "phone",unique = true)
     private String phone;
 
-    @Column(nullable = true,name ="password")
+    @Column(nullable = false,name ="password")
     private String password;
 
     @Column(nullable = true, name = "role")
@@ -45,7 +45,7 @@ public class User {
     private String gender;
 
     @Column(nullable = true, name = "budget")
-    private String budget;
+    private double budget = 0;
 
     @Column(nullable = true, name = "create_at")
     private Instant createAt;

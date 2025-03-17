@@ -17,7 +17,7 @@ public interface UserRequest {
         private String role = "USER";
         private String dateOfBirth;
         private String gender;
-        private String budget;
+        private double budget;
     }
 
 //    @Getter
